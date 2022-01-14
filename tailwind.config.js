@@ -5,6 +5,8 @@ module.exports = {
       colors: {
         "header-blue": "#192ABE",
         "body-blue": "#283DFA",
+        "text-blue": "#B1B9FF",
+        "similar-blue": "#7179C5",
       },
     },
   },
