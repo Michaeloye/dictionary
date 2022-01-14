@@ -6,7 +6,7 @@ module.exports = {
         "header-blue": "#192ABE",
         "body-blue": "#283DFA",
         "text-blue": "#B1B9FF",
-        "similar-blue": "#7179C5",
+        "synonym-blue": "#7179C5",
       },
     },
   },
