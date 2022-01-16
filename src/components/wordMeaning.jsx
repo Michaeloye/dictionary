@@ -1,10 +1,10 @@
 import React from "react";
 import SynonymCard from "./synonymCard";
 
-function WordMeaning({ partOfSpeech, definitions }) {
+function WordMeaning({ partOfSpeech, definitions, searchWordFromSynonym }) {
   return (
     <div className="text-lg">
-      <p className="text-white mt-5 ml-5">
+      <p className="text-white mt-5 ml-5 underline">
         <i>{partOfSpeech}</i>
       </p>
       {Boolean(definitions.length) &&
@@ -22,8 +22,11 @@ function WordMeaning({ partOfSpeech, definitions }) {
               {Boolean(definition.synonyms.length) && (
                 <div className="flex flex-wrap mt-2 text-white items-start">
                   <p>similar: </p>
-                  {definition.synonyms.map((synonym) => (
-                    <SynonymCard word={synonym} />
+                  {definition.synonyms.slice(0, 5).map((synonym) => (
+                    <SynonymCard
+                      word={synonym}
+                      searchWordFromSynonym={searchWordFromSynonym}
+                    />
                   ))}
                 </div>
               )}
