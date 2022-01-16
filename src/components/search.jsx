@@ -13,7 +13,7 @@ function Search({ submitForm, getInput }) {
   }, [width]);
 
   return (
-    <div className="">
+    <div className="mt-3">
       <div className="relative">
         <form onSubmit={submitForm}>
           <input
