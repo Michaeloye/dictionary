@@ -1,5 +1,6 @@
 import React from "react";
 import SynonymCard from "./synonymCard";
+import { nanoid } from "nanoid";
 
 function WordMeaning({ partOfSpeech, definitions, searchWordFromSynonym }) {
   return (
@@ -9,7 +10,7 @@ function WordMeaning({ partOfSpeech, definitions, searchWordFromSynonym }) {
       </p>
       {Boolean(definitions.length) &&
         definitions.map((definition) => (
-          <div>
+          <div key={nanoid()}>
             <p className="text-text-blue mt-3">
               <span className="text-white">meaning: </span>
               {definition.definition}
@@ -24,6 +25,7 @@ function WordMeaning({ partOfSpeech, definitions, searchWordFromSynonym }) {
                   <p>similar: </p>
                   {definition.synonyms.slice(0, 5).map((synonym) => (
                     <SynonymCard
+                      key={nanoid()}
                       word={synonym}
                       searchWordFromSynonym={searchWordFromSynonym}
                     />
