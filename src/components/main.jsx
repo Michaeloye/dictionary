@@ -10,6 +10,7 @@ function Main() {
   const [transcription, setTranscription] = useState("");
   const [meanings, setMeanings] = useState([]);
   const [audioLink, setAudioLink] = useState();
+  const [wordNotFound, setWordNotFound] = useState();
   const audio = new Audio(audioLink);
 
   function searchWord(e) {
@@ -26,8 +27,9 @@ function Main() {
         setAudioLink(data.phonetics[0].audio);
         setTranscription(data.phonetic);
         setMeanings(data.meanings);
+        setWordNotFound(false);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => setWordNotFound(true));
   }
   function getInput(e) {
     setWord(e.target.value);
@@ -35,29 +37,40 @@ function Main() {
   useEffect(() => {
     searchWord("hello");
   }, []);
+
+  const wordNotFoundTemplate = (
+    <div className="mt-40 text-center">
+      <p className="text-white font-semibold text-2xl lg:text-4xl">
+        Word Not Found
+      </p>
+    </div>
+  );
+  const wordFoundTemplate = (
+    <div className="px-7 lg:px-20 mt-10">
+      <div className="name-and-audio flex items-end">
+        <p className="text-white font-medium text-4xl">{keyword}</p>
+        <div onClick={() => audio.play()}>
+          <GiSpeaker className="text-text-blue" size={38} />
+        </div>
+      </div>
+      <p className="font-medium text-lg text-text-blue -mb-3">
+        {transcription}
+      </p>
+      {Boolean(meanings.length) &&
+        meanings.map((meaning) => (
+          <WordMeaning
+            key={meaning.partOfSpeech}
+            partOfSpeech={meaning.partOfSpeech}
+            definitions={meaning.definitions}
+            searchWordFromSynonym={searchWord}
+          />
+        ))}
+    </div>
+  );
   return (
     <div>
       <Search submitForm={searchWord} getInput={getInput} />
-      <div className="px-7 lg:px-20 mt-10">
-        <div className="name-and-audio flex items-end">
-          <p className="text-white font-medium text-4xl">{keyword}</p>
-          <div onClick={() => audio.play()}>
-            <GiSpeaker className="text-text-blue" size={38} />
-          </div>
-        </div>
-        <p className="font-medium text-lg text-text-blue -mb-3">
-          {transcription}
-        </p>
-        {Boolean(meanings.length) &&
-          meanings.map((meaning) => (
-            <WordMeaning
-              key={meaning.partOfSpeech}
-              partOfSpeech={meaning.partOfSpeech}
-              definitions={meaning.definitions}
-              searchWordFromSynonym={searchWord}
-            />
-          ))}
-      </div>
+      {wordNotFound ? wordNotFoundTemplate : wordFoundTemplate}
     </div>
   );
 }
