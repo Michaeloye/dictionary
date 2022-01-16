@@ -28,7 +28,7 @@ function Main() {
   }
 
   return (
-    <div className=" bg-body-blue">
+    <div>
       <Search submitForm={submitForm} getInput={getInput} />
       <div className="px-7 lg:px-20 mt-10">
         <div className="name-and-audio flex items-end">
