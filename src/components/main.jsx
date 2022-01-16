@@ -16,7 +16,18 @@ function Main() {
       .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
       .then((res) => {
         const data = res.data[0];
-        console.log(data);
+        setKeyword(data.word);
+        setTranscription(data.phonetic);
+        setMeanings(data.meanings);
+      })
+      .catch((error) => console.log(error));
+  }
+  function searchWordFromSynonym(w) {
+    setWord(w);
+    axios
+      .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${w}`)
+      .then((res) => {
+        const data = res.data[0];
         setKeyword(data.word);
         setTranscription(data.phonetic);
         setMeanings(data.meanings);
@@ -46,6 +57,7 @@ function Main() {
               key={meaning.partOfSpeech}
               partOfSpeech={meaning.partOfSpeech}
               definitions={meaning.definitions}
+              searchWordFromSynonym={searchWordFromSynonym}
             />
           ))}
       </div>
