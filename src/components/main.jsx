@@ -6,29 +6,24 @@ import WordMeaning from "./wordMeaning";
 
 function Main() {
   const [word, setWord] = useState();
-  const [keyword, setKeyword] = useState("Hello");
-  const [transcription, setTranscription] = useState("həˈloʊ");
+  const [keyword, setKeyword] = useState("");
+  const [transcription, setTranscription] = useState("");
   const [meanings, setMeanings] = useState([]);
+  const [audioLink, setAudioLink] = useState();
+  const audio = new Audio(audioLink);
 
-  function submitForm(e) {
-    e.preventDefault();
+  function searchWord(e) {
+    if (typeof e !== "string") e.preventDefault();
     axios
-      .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+      .get(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${
+          typeof e === "string" ? e : word
+        }`
+      )
       .then((res) => {
         const data = res.data[0];
         setKeyword(data.word);
-        setTranscription(data.phonetic);
-        setMeanings(data.meanings);
-      })
-      .catch((error) => console.log(error));
-  }
-  function searchWordFromSynonym(w) {
-    setWord(w);
-    axios
-      .get(`https://api.dictionaryapi.dev/api/v2/entries/en/${w}`)
-      .then((res) => {
-        const data = res.data[0];
-        setKeyword(data.word);
+        setAudioLink(data.phonetics[0].audio);
         setTranscription(data.phonetic);
         setMeanings(data.meanings);
       })
@@ -37,14 +32,16 @@ function Main() {
   function getInput(e) {
     setWord(e.target.value);
   }
-
+  useEffect(() => {
+    searchWord("hello");
+  }, []);
   return (
     <div>
-      <Search submitForm={submitForm} getInput={getInput} />
+      <Search submitForm={searchWord} getInput={getInput} />
       <div className="px-7 lg:px-20 mt-10">
         <div className="name-and-audio flex items-end">
           <p className="text-white font-medium text-4xl">{keyword}</p>
-          <div>
+          <div onClick={() => audio.play()}>
             <GiSpeaker className="text-text-blue" size={38} />
           </div>
         </div>
@@ -57,7 +54,7 @@ function Main() {
               key={meaning.partOfSpeech}
               partOfSpeech={meaning.partOfSpeech}
               definitions={meaning.definitions}
-              searchWordFromSynonym={searchWordFromSynonym}
+              searchWordFromSynonym={searchWord}
             />
           ))}
       </div>
