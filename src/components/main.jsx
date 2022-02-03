@@ -68,7 +68,7 @@ function Main() {
     </div>
   );
   return (
-    <div>
+    <div className="min-h-[65vh]">
       <Search submitForm={searchWord} getInput={getInput} />
       {wordNotFound ? wordNotFoundTemplate : wordFoundTemplate}
     </div>
