@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Search from "./search";
 import { GiSpeaker } from "react-icons/gi";
+import { TailSpin } from "react-loader-spinner";
 import axios from "axios";
 import WordMeaning from "./wordMeaning";
 
@@ -11,6 +12,7 @@ function Main() {
   const [meanings, setMeanings] = useState([]);
   const [audioLink, setAudioLink] = useState();
   const [wordNotFound, setWordNotFound] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const audio = new Audio(audioLink);
 
   function searchWord(e) {
@@ -28,6 +30,7 @@ function Main() {
         setTranscription(data.phonetic);
         setMeanings(data.meanings);
         setWordNotFound(false);
+        setIsLoading(false);
       })
       .catch((error) => setWordNotFound(true));
   }
@@ -68,9 +71,14 @@ function Main() {
     </div>
   );
   return (
-    <div className="min-h-[65vh]">
+    <div className="min-h-[74vh]">
       <Search submitForm={searchWord} getInput={getInput} />
-      {wordNotFound ? wordNotFoundTemplate : wordFoundTemplate}
+      {isLoading && (
+        <div className="flex justify-center mt-[10%]">
+          <TailSpin color="#ffffff" height={80} width={80} />
+        </div>
+      )}
+      {!isLoading && (wordNotFound ? wordNotFoundTemplate : wordFoundTemplate)}
     </div>
   );
 }
